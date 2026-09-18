@@ -1,0 +1,40 @@
+---
+title: Tributary
+description: High-throughput AI gateway for routing requests across multiple providers.
+template: splash
+hero:
+  tagline: Route everything. Lose nothing.
+  actions:
+    - text: Quick Start
+      link: /getting-started
+      icon: right-arrow
+    - text: GitHub
+      link: https://github.com/tributary-gateway/tributary
+      icon: external
+      variant: minimal
+---
+
+:::caution[Work in Progress]
+This project is under active development. APIs, configuration, and documentation may change without notice. Not yet ready for production use.
+:::
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## What is Tributary?
+
+Tributary is a high-throughput, low-latency AI gateway written in Rust. It routes requests across OpenAI, Anthropic, and other providers with built-in rate limiting, cost metering, and streaming support.
+
+<CardGrid stagger>
+	<Card title="Fast" icon="rocket">
+		Built on Rust + Tokio. Sub-millisecond proxy overhead.
+	</Card>
+	<Card title="Multi-provider" icon="random">
+		OpenAI, Anthropic, and more through a single OpenAI-compatible API.
+	</Card>
+	<Card title="Observable" icon="seti:chart">
+		Built-in metrics, logging, and cost tracking per request.
+	</Card>
+	<Card title="Production-ready" icon="star">
+		Rate limiting, auth, hot-reload config, Docker and binary deployments.
+	</Card>
+</CardGrid>

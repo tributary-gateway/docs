@@ -1,0 +1,81 @@
+---
+title: API Reference
+description: Tributary API endpoints and request/response shapes.
+---
+
+Tributary exposes an OpenAI-compatible API. Existing OpenAI SDK integrations work without changes.
+
+## Endpoints
+
+### POST /v1/chat/completions
+
+Create a chat completion.
+
+**Request:**
+
+```json
+{
+  "model": "gpt-4",
+  "messages": [
+    {"role": "user", "content": "Hello"}
+  ],
+  "stream": false
+}
+```
+
+**Response:**
+
+```json
+{
+  "id": "chatcmpl-abc123",
+  "object": "chat.completion",
+  "model": "gpt-4",
+  "choices": [
+    {
+      "index": 0,
+      "message": {"role": "assistant", "content": "Hello!"},
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 10,
+    "completion_tokens": 5,
+    "total_tokens": 15
+  }
+}
+```
+
+### POST /v1/chat/completions (streaming)
+
+Set `"stream": true` to receive server-sent events.
+
+### GET /health
+
+Health check endpoint.
+
+**Response:** `200 OK`
+
+### GET /ready
+
+Readiness check endpoint.
+
+**Response:** `200 OK` when ready, `503 Service Unavailable` when not ready.
+
+## Headers
+
+| Header | Description |
+|---|---|
+| `Authorization` | Bearer token (if auth is enabled) |
+| `Content-Type` | `application/json` |
+
+## Error responses
+
+```json
+{
+  "error": {
+    "message": "Rate limit exceeded",
+    "type": "rate_limit_error",
+    "code": 429
+  }
+}
+```

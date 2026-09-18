@@ -1,0 +1,85 @@
+---
+title: Deployment
+description: Deploy Tributary via Docker, binary, or Kubernetes.
+---
+
+## Docker
+
+```bash
+docker run -d \
+  --name tributary \
+  -p 8080:8080 \
+  -e OPENAI_API_KEY=sk-your-key \
+  -v config.yml:/app/config.yml \
+  tributary-gateway/tributary:latest
+```
+
+## Docker Compose
+
+```yaml
+services:
+  tributary:
+    image: tributary-gateway/tributary:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+    volumes:
+      - ./config.yml:/app/config.yml
+```
+
+## Binary
+
+Download from [GitHub Releases](https://github.com/tributary-gateway/tributary/releases).
+
+```bash
+./tributary serve --config config.yml
+```
+
+## Systemd
+
+```ini
+[Unit]
+Description=Tributary AI Gateway
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/tributary serve --config /etc/tributary/config.yml
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+```
+
+## Kubernetes
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tributary
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: tributary
+  template:
+    metadata:
+      labels:
+        app: tributary
+    spec:
+      containers:
+        - name: tributary
+          image: tributary-gateway/tributary:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: tributary-secrets
+                  key: openai-api-key
+```

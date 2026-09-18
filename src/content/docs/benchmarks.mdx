@@ -1,0 +1,35 @@
+---
+title: Benchmarks
+description: Performance benchmarks for Tributary.
+---
+
+## Results
+
+Tributary adds sub-millisecond overhead to proxied requests.
+
+| Metric | Result |
+|---|---|
+| Streaming latency overhead | < 1ms |
+| Throughput (requests/sec) | TBD |
+| Memory footprint (idle) | TBD |
+| Cold start time | TBD |
+
+*Benchmarks run on Intel Core Ultra 5 125H, 16GB RAM. Full methodology below.*
+
+## Running benchmarks
+
+Clone the source repo and use the benchmark stack:
+
+```bash
+git clone https://github.com/tributary-gateway/tributary-benchmarks.git
+cd tributary-benchmarks
+docker compose -f docker-compose.bench.yml up
+./run-all.sh
+```
+
+## What we measure
+
+- **Streaming latency** — time from first byte sent to first byte received
+- **Throughput** — concurrent requests sustained without errors
+- **Memory** — RSS under load
+- **Cold start** — time from process start to first request served

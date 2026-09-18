@@ -1,0 +1,45 @@
+---
+title: Architecture
+description: How Tributary routes requests and handles traffic.
+---
+
+## Request flow
+
+```mermaid
+flowchart LR
+    Client --> Tributary
+    Tributary --> Auth
+    Auth --> RateLimit
+    RateLimit --> Router
+    Router --> OpenAI
+    Router --> Anthropic
+    Router --> Other
+```
+
+1. **Client** sends an OpenAI-compatible request
+2. **Auth** validates API keys and permissions
+3. **Rate Limit** enforces per-key or global limits
+4. **Router** selects the provider based on route config
+5. **Provider** handles the request; response streams back through Tributary
+
+## Design principles
+
+- **Zero-copy proxying** — request bodies stream through without buffering
+- **No Python dependency** — pure Rust, minimal binary size
+- **OpenAI-compatible** — existing SDK integrations work unchanged
+- **Hot-reload config** — change routes without restarting
+
+## Components
+
+```mermaid
+graph TB
+    CLI[gateway-cli] --> Core[gateway-core]
+    Config[gateway-config] --> Core
+    Core --> Server[HTTP Server]
+    Core --> Router[Request Router]
+    Core --> Metrics[Metrics Collector]
+```
+
+- **gateway-cli** — CLI entry point and config loading
+- **gateway-core** — HTTP server, routing, middleware
+- **gateway-config** — YAML config parsing and hot-reload

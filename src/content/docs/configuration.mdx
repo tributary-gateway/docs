@@ -1,0 +1,93 @@
+---
+title: Configuration
+description: Tributary configuration reference.
+---
+
+Tributary is configured via a YAML file (`config.yml`) or environment variables.
+
+## Server
+
+```yaml
+server:
+  port: 8080
+  host: 0.0.0.0
+```
+
+| Field | Default | Description |
+|---|---|---|
+| `server.port` | `8080` | Port to listen on |
+| `server.host` | `0.0.0.0` | Bind address |
+
+## Providers
+
+```yaml
+providers:
+  openai:
+    api_key: ${OPENAI_API_KEY}
+    base_url: https://api.openai.com/v1
+  anthropic:
+    api_key: ${ANTHROPIC_API_KEY}
+    base_url: https://api.anthropic.com/v1
+```
+
+Each provider requires an `api_key`. `base_url` defaults to the provider's official API endpoint.
+
+## Routes
+
+```yaml
+routes:
+  - path: /v1/chat/completions
+    methods: [POST]
+    provider: openai
+  - path: /v1/messages
+    methods: [POST]
+    provider: anthropic
+```
+
+## Rate Limiting
+
+```yaml
+rate_limit:
+  enabled: true
+  requests_per_minute: 60
+```
+
+## Logging
+
+```yaml
+logging:
+  level: info
+  format: json
+```
+
+Levels: `debug`, `info`, `warn`, `error`.
+
+## Full example
+
+```yaml
+server:
+  port: 8080
+  host: 0.0.0.0
+
+providers:
+  openai:
+    api_key: ${OPENAI_API_KEY}
+  anthropic:
+    api_key: ${ANTHROPIC_API_KEY}
+
+routes:
+  - path: /v1/chat/completions
+    methods: [POST]
+    provider: openai
+  - path: /v1/messages
+    methods: [POST]
+    provider: anthropic
+
+rate_limit:
+  enabled: true
+  requests_per_minute: 60
+
+logging:
+  level: info
+  format: json
+```

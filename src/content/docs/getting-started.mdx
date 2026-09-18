@@ -1,0 +1,53 @@
+---
+title: Quick Start
+description: Get Tributary running in 5 minutes.
+---
+
+## Prerequisites
+
+- Docker **or** a Linux/macOS machine
+- An API key for at least one provider (OpenAI, Anthropic, etc.)
+
+## Option 1: Docker (recommended)
+
+```bash
+docker run -p 8080:8080 \
+  -e OPENAI_API_KEY=sk-your-key \
+  tributary-gateway/tributary:latest
+```
+
+## Option 2: Binary
+
+Download the latest release for your platform:
+
+```bash
+# Linux amd64
+curl -fsSL https://github.com/tributary-gateway/tributary/releases/latest/download/tributary-linux-amd64 -o tributary
+chmod +x tributary
+```
+
+```bash
+# macOS arm64
+curl -fsSL https://github.com/tributary-gateway/tributary/releases/latest/download/tributary-darwin-arm64 -o tributary
+chmod +x tributary
+```
+
+Run it:
+
+```bash
+OPENAI_API_KEY=sk-your-key ./tributary serve
+```
+
+## Verify
+
+```bash
+curl http://localhost:8080/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{"model": "gpt-4", "messages": [{"role": "user", "content": "Hello"}]}'
+```
+
+## Next steps
+
+- [Configuration](/configuration) — all options
+- [API Reference](/api-reference) — endpoints and request/response shapes
+- [Deployment](/deployment) — Docker Compose, Kubernetes, systemd
